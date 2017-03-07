@@ -8,12 +8,3 @@ config :musix, Musix.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
-
-# Configure your database
-config :musix, Musix.Repo,
-  adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
-  database: "musix_test",
-  hostname: "localhost",
-  pool: Ecto.Adapters.SQL.Sandbox

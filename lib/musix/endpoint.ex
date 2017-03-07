@@ -36,7 +36,7 @@ defmodule Musix.Endpoint do
   plug Plug.Session,
     store: :cookie,
     key: "_musix_key",
-    signing_salt: "/4GYDmzn"
+    signing_salt: "na+8OHAH"
 
   plug Musix.Router
 end

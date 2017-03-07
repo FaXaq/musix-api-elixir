@@ -5,14 +5,10 @@
 # is restricted to this project.
 use Mix.Config
 
-# General application configuration
-config :musix,
-  ecto_repos: [Musix.Repo]
-
 # Configures the endpoint
 config :musix, Musix.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "WnqQyBwabRIkACFJPhPnHTYfuQeOv8X0JaDtbBbnahGtBBgZ38jj5Lesm3uCEZ4m",
+  secret_key_base: "J5fG9ElIzza5CkgxgvzNlJGovXlhvyg7mX1wCZ78ee0aJvrEJTGLvjekEa0Q6RbD",
   render_errors: [view: Musix.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Musix.PubSub,
            adapter: Phoenix.PubSub.PG2]

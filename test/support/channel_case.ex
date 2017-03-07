@@ -20,11 +20,6 @@ defmodule Musix.ChannelCase do
       # Import conveniences for testing with channels
       use Phoenix.ChannelTest
 
-      alias Musix.Repo
-      import Ecto
-      import Ecto.Changeset
-      import Ecto.Query
-
 
       # The default endpoint for testing
       @endpoint Musix.Endpoint
@@ -32,11 +27,6 @@ defmodule Musix.ChannelCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Musix.Repo)
-
-    unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Musix.Repo, {:shared, self()})
-    end
 
     :ok
   end

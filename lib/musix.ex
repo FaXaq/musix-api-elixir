@@ -8,8 +8,6 @@ defmodule Musix do
 
     # Define workers and child supervisors to be supervised
     children = [
-      # Start the Ecto repository
-      supervisor(Musix.Repo, []),
       # Start the endpoint when the application starts
       supervisor(Musix.Endpoint, []),
       # Start your own worker by calling: Musix.Worker.start_link(arg1, arg2, arg3)
