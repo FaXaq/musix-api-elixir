@@ -20,7 +20,13 @@ defmodule Musix.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", Musix do
-  #   pipe_through :api
-  # end
+  scope "/api/v1/", Musix do
+    pipe_through :api
+
+    get "/", PageController, :api_description
+
+    get "/notes", NoteController, :index
+    get "/notes/flatten/:note", NoteController, :flatten
+    get "/notes/sharpen/:note", NoteController, :sharpen
+  end
 end
