@@ -15,8 +15,6 @@ defmodule Musix.Router do
 
   scope "/", Musix do
     pipe_through :browser # Use the default browser stack
-
-    get "/", PageController, :index
   end
 
   # Other scopes may use custom stacks.
@@ -25,8 +23,14 @@ defmodule Musix.Router do
 
     get "/", PageController, :api_description
 
-    get "/notes", NoteController, :index
+    get "/notes/", NoteController, :index
     get "/notes/flatten/:note", NoteController, :flatten
     get "/notes/sharpen/:note", NoteController, :sharpen
+
+    get "/chords/", ChordController, :index
+    get "/chords/major/:root", ChordController, :major_triad
+    get "/chords/minor/:root", ChordController, :minor_triad
+    get "/chords/aug/:root", ChordController, :aug_triad
+    get "/chords/dim/:root", ChordController, :dim_triad
   end
 end

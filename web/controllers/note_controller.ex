@@ -2,8 +2,11 @@ defmodule Musix.NoteController do
   use Musix.Web, :controller
   use Musix.Note
 
-  def index(conn, _params) do
-    json conn, %{notes: get_notes()}
+  def index(conn, _) do
+    json conn, %{
+      status: 200,
+      notes: get_notes()
+    }
   end
 
   def flatten(conn, params) do
