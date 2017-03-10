@@ -21,6 +21,13 @@ defmodule Musix.NoteTest do
     end
   end
 
+  test "Get note alias" do
+    case get_note_alias("G") do
+      note ->
+        assert(note === "G")
+    end
+  end
+
   test "Sharpen note" do
     case get_sharpened_note("Gb") do
       {atom, note} ->
@@ -86,6 +93,30 @@ defmodule Musix.NoteTest do
       {atom, note} ->
         assert(atom == :ok)
         assert(note === "E")
+    end
+  end
+
+  test "get a minor third" do
+    case get_minor_third("C") do
+      {atom, note} ->
+        assert(atom == :ok)
+        assert(note === "Eb")
+    end
+  end
+
+  test "get a augmented fifth" do
+    case get_augmented_fifth("Cs") do
+      {atom, note} ->
+        assert(atom == :ok)
+        assert(note === "A")
+    end
+  end
+
+  test "get a diminished fifth" do
+    case get_diminished_fifth("C") do
+      {atom, note} ->
+        assert(atom == :ok)
+        assert(note === "Gb")
     end
   end
 end

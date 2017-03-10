@@ -4,6 +4,8 @@ defmodule Musix.Note do
 
   # constants
   @notes {"Ab","A","As","Bb","B","C","Cs","Db","D","Ds","Eb","E","F","Fs","Gb","G","Gs"}
+  @notes_alias %{"Ab" => "Gs", "Bb" => "As", "Db" => "Cs", "Eb" => "Ds", "Gb" => "Fs",
+                 "Gs" => "Ab", "As" => "Bb", "Cs" => "Db", "Ds" => "Eb", "Fs" => "Gb"}
   @notes_length length Tuple.to_list @notes
 
   def get_notes do
@@ -81,6 +83,10 @@ defmodule Musix.Note do
     end
   end
 
+  #######
+  ## 5 ##
+  #######
+
   ## a perfect fifth is 7 semi-tones above root note
   def get_perfect_fifth(root) do
     case get_note_above(root, 7) do
@@ -91,6 +97,30 @@ defmodule Musix.Note do
     end
   end
 
+  ## a augmented fifth is 8 semi-tones above root note
+  def get_augmented_fifth(root) do
+    case get_note_above(root, 8) do
+      {:ok, note} ->
+        {:ok, note}
+      {:error, message} ->
+        {:error, message}
+    end
+  end
+
+  ## a diminished fifth is 6 semi-tones above root note
+  def get_diminished_fifth(root) do
+    case get_note_above(root, 6) do
+      {:ok, note} ->
+        {:ok, get_note_alias(note)}
+      {:error, message} ->
+        {:error, message}
+    end
+  end
+
+  #######
+  ## 3 ##
+  #######
+
   ## a major third is 4 semi-tones above root note
   def get_major_third(root) do
     case get_note_above(root, 4) do
@@ -98,6 +128,31 @@ defmodule Musix.Note do
         {:ok, note}
       {:error, message} ->
         {:error, message}
+    end
+  end
+
+  ## a minor third is 3 semi-tones above root note
+  def get_minor_third(root) do
+    case get_note_above(root, 3) do
+      {:ok, note} ->
+        {:ok, get_note_alias(note)}
+      {:error, message} ->
+        {:error, message}
+    end
+  end
+
+  ##########
+  ## misc ##
+  ##########
+
+  ## sometimes in minor chords essentially, we need alias for flat notes instead of sharp ones
+  ## (Bb instead of As for instance)
+  def get_note_alias(note) do
+    case Map.fetch(@notes_alias, note) do
+      {:ok, new_note} ->
+        new_note
+      _ ->
+        note
     end
   end
 
