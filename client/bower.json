@@ -1,8 +1,7 @@
 {
-  "name": "angular-seed",
-  "description": "A starter project for AngularJS",
-  "version": "0.0.0",
-  "homepage": "https://github.com/angular/angular-seed",
+  "name": "musix-client": "A music theory learning tool",
+  "version": "0.0.1",
+  "homepage": "https://github.com/faxaq/musix/client",
   "license": "MIT",
   "private": true,
   "dependencies": {
