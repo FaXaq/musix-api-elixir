@@ -29,9 +29,14 @@ defmodule Musix.Router do
     get "/notes/sharpen/:note", NoteController, :sharpen
 
     get "/chords/", ChordController, :index
+
+    #major
     get "/chords/major/:root", ChordController, :major_triad
-    get "/chords/minor/:root", ChordController, :minor_triad
     get "/chords/aug/:root", ChordController, :aug_triad
+    get "/chords/7/:root", ChordController, :dominant_seventh
+
+    #minor
+    get "/chords/minor/:root", ChordController, :minor_triad
     get "/chords/dim/:root", ChordController, :dim_triad
   end
 end

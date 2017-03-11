@@ -119,4 +119,12 @@ defmodule Musix.NoteTest do
         assert(note === "Gb")
     end
   end
+
+  test "get a seventh" do
+    case get_seventh("Fs") do
+      {atom, note} ->
+        assert(atom == :ok)
+        assert(note === "E")
+    end
+  end
 end

@@ -1,0 +1,9 @@
+<div class="notes-container">
+  <h1> notes </h1>
+  <ul class="notes">
+    <li class="note" ng-repeat="(note, note_s) in notes">
+      <a ng-href="#/chords/{{note}}">{{note_s}}</a>
+    </li>
+  </ul>
+  {{error}}
+</div>

@@ -1,0 +1,14 @@
+<div class="header">
+  <h1>Chords</h1>
+</div>
+<div class="content">
+  <ul class="chords">
+    <li class="chord" ng-repeat="(chord, comp) in chords">
+      <h3>
+        {{comp.long}} ({{chord}})
+      </h3>
+      <p>{{comp.long_desc}}</p>
+      <p ng-show="{{root !== undefined}}">With {{root}} as a root note, the {{chord}} is : {{comp.chord}}</p>
+    </li>
+  </ul>
+</div>

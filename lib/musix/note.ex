@@ -141,6 +141,19 @@ defmodule Musix.Note do
     end
   end
 
+  #######
+  ## 7 ##
+  #######
+
+  def get_seventh(root) do
+    case get_note_above(root, 10) do
+      {:ok, note} ->
+        {:ok, note}
+      {:error, message} ->
+        {:error, message}
+    end
+  end
+
   ##########
   ## misc ##
   ##########

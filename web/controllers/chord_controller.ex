@@ -114,6 +114,32 @@ defmodule Musix.ChordController do
     end
   end
 
+  def dominant_seventh(conn, params) do
+    root = params["root"]
+
+    case get_note_index(root) do
+      #when not is invalid
+      {:error, message} ->
+        error_400 conn, message
+
+        #when note is valid
+      {:ok, _} ->
+        case get_dominant_seventh(root) do
+          {:ok, chord} ->
+            put_status(conn, 200)
+            |> json(%{
+                  status: 200,
+                  chord: chord
+                    })
+          {:error, message} ->
+            error_400 conn, message
+        end
+
+      _ ->
+        error_400 conn, "No idea what happened here"
+    end
+  end
+
   def error_400(conn, message) do
     put_status(conn, 400)
     |> json(%{

@@ -5,7 +5,7 @@ defmodule Musix.ChordTest do
   test "get all chords" do
     case get_chords() do
       x ->
-        assert(is_map(%{"major" => "major","minor" => "minor","augmented" => "aug","diminished" => "dim"}))
+        assert(is_map(x))
     end
   end
 
@@ -37,6 +37,14 @@ defmodule Musix.ChordTest do
     case get_diminished_triad("G") do
       {atom, chord} ->
         assert(["G","Bb","Db"] === chord)
+        assert(atom == :ok)
+    end
+  end
+
+  test "get a dominant seventh" do
+    case get_dominant_seventh("Ab") do
+      {atom, chord} ->
+        assert(["Ab","C","Ds","Fs"] === chord)
         assert(atom == :ok)
     end
   end

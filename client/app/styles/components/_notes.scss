@@ -1,0 +1,13 @@
+.notes-container {
+    .notes {
+        display:flex;
+        flex-direction:row;
+        justify-content:center;
+        flex-wrap:wrap;
+        .note {
+            padding:.2em;
+            border:1px solid grey;
+            margin:.2em .2em;
+        }
+    }
+}

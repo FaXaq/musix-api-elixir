@@ -1,0 +1,15 @@
+.main {
+    .content {
+        margin:0 5%;
+    }
+    > div > .header {
+        text-align:center;
+        padding:.5em;
+        &::after {
+            content:"";
+            display:block;
+            height:1px;
+            background-color:grey;
+        }
+    }
+}
