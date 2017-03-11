@@ -10,6 +10,7 @@ defmodule Musix.Router do
   end
 
   pipeline :api do
+    plug CORSPlug, [origin: "http://localhost:9000"]
     plug :accepts, ["json"]
   end
 
