@@ -1,7 +1,14 @@
 defmodule Musix.Chord do
   use Musix.Note
 
-  @chords %{"major" => "major","minor" => "minor","augmented" => "aug","diminished" => "dim"}
+  @chords %{"major" => %{"long" => "major triad",
+                               "long_desc" => "a root note (the note you gave at first, a major third and a perfect fifth"},
+            "minor" => %{"long" => "minor triad",
+                               "long_desc" => "a root note (the note you gave at first), a minor third and a perfect fifth"},
+            "aug" => %{"long" => "augmented triad",
+                                   "long_desc" => "a root note (the note you gave at first), a major third and a augmented fifth"},
+            "dim" => %{"long" => "diminished triad",
+                                    "long_desc" => "a root note (the note you gave at first), a minor third and a diminished fifth"}}
 
   def get_chords do
     @chords

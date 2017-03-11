@@ -1,14 +1,20 @@
 {
-  "name": "musix-client": "A music theory learning tool",
+  "name": "client",
   "version": "0.0.1",
-  "homepage": "https://github.com/faxaq/musix/client",
-  "license": "MIT",
-  "private": true,
   "dependencies": {
-    "angular": "~1.5.0",
-    "angular-route": "~1.5.0",
-    "angular-loader": "~1.5.0",
-    "angular-mocks": "~1.5.0",
-    "html5-boilerplate": "^5.3.0"
-  }
+    "angular": "^1.4.0",
+    "angular-animate": "^1.4.0",
+    "angular-aria": "^1.4.0",
+    "angular-cookies": "^1.4.0",
+    "angular-messages": "^1.4.0",
+    "angular-resource": "^1.4.0",
+    "angular-route": "^1.4.0",
+    "angular-sanitize": "^1.4.0",
+    "angular-touch": "^1.4.0"
+  },
+  "devDependencies": {
+    "angular-mocks": "^1.4.0"
+  },
+  "appPath": "app",
+  "moduleName": "musix"
 }
