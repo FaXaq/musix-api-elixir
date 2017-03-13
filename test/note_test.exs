@@ -120,11 +120,27 @@ defmodule Musix.NoteTest do
     end
   end
 
-  test "get a seventh" do
-    case get_seventh("Fs") do
+  test "get a minor seventh" do
+    case get_minor_seventh("Fs") do
       {atom, note} ->
         assert(atom == :ok)
         assert(note === "E")
+    end
+  end
+
+  test "get a major seventh" do
+    case get_major_seventh("Fs") do
+      {atom, note} ->
+        assert(atom == :ok)
+        assert(note === "F")
+    end
+  end
+
+  test "get a diminished seventh" do
+    case get_diminished_seventh("Fs") do
+      {atom, note} ->
+        assert(atom == :ok)
+        assert(note === "Eb")
     end
   end
 end

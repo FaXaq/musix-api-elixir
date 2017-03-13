@@ -6,7 +6,7 @@ defmodule Musix.ChordController do
   def index(conn, _params) do
     json conn, %{
       status: 200,
-      chords: get_chords()
+      desc: get_chords()
     }
   end
 
@@ -21,11 +21,12 @@ defmodule Musix.ChordController do
         #when note is valid
       {:ok, _} ->
         case get_major_triad(root) do
-          {:ok, chord} ->
+          {:ok, desc, chord} ->
             put_status(conn, 200)
             |> json(%{
                   status: 200,
-                  chord: chord,
+                  desc: desc,
+                  chord: chord
                     })
           {:error, message} ->
             error_400 conn, message
@@ -47,10 +48,11 @@ defmodule Musix.ChordController do
         #when note is valid
       {:ok, _} ->
         case get_minor_triad(root) do
-          {:ok, chord} ->
+          {:ok, desc, chord} ->
             put_status(conn, 200)
             |> json(%{
                   status: 200,
+                  desc: desc,
                   chord: chord
                     })
           {:error, message} ->
@@ -73,10 +75,11 @@ defmodule Musix.ChordController do
         #when note is valid
       {:ok, _} ->
         case get_augmented_triad(root) do
-          {:ok, chord} ->
+          {:ok, desc, chord} ->
             put_status(conn, 200)
             |> json(%{
                   status: 200,
+                  desc: desc,
                   chord: chord
                     })
           {:error, message} ->
@@ -85,7 +88,7 @@ defmodule Musix.ChordController do
 
       _ ->
         error_400 conn, "No idea what happened here"
-    end
+     end
   end
 
   def dim_triad(conn, params) do
@@ -99,10 +102,11 @@ defmodule Musix.ChordController do
         #when note is valid
       {:ok, _} ->
         case get_diminished_triad(root) do
-          {:ok, chord} ->
+          {:ok, desc, chord} ->
             put_status(conn, 200)
             |> json(%{
                   status: 200,
+                  desc: desc,
                   chord: chord
                     })
           {:error, message} ->
@@ -117,7 +121,7 @@ defmodule Musix.ChordController do
   def dominant_seventh(conn, params) do
     root = params["root"]
 
-    case get_note_index(root) do
+    case get_note_index(root)  do
       #when not is invalid
       {:error, message} ->
         error_400 conn, message
@@ -125,10 +129,11 @@ defmodule Musix.ChordController do
         #when note is valid
       {:ok, _} ->
         case get_dominant_seventh(root) do
-          {:ok, chord} ->
+          {:ok, desc, chord} ->
             put_status(conn, 200)
             |> json(%{
                   status: 200,
+                  desc: desc,
                   chord: chord
                     })
           {:error, message} ->

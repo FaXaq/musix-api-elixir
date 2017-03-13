@@ -145,10 +145,31 @@ defmodule Musix.Note do
   ## 7 ##
   #######
 
-  def get_seventh(root) do
+  ## a minor seventh is 10 semi-tones above root note
+  def get_minor_seventh(root) do
     case get_note_above(root, 10) do
       {:ok, note} ->
         {:ok, note}
+      {:error, message} ->
+        {:error, message}
+    end
+  end
+
+  ## a minor seventh is 10 semi-tones above root note
+  def get_major_seventh(root) do
+    case get_note_above(root, 11) do
+      {:ok, note} ->
+        {:ok, note}
+      {:error, message} ->
+        {:error, message}
+    end
+  end
+
+  ## a minor seventh is 10 semi-tones above root note
+  def get_diminished_seventh(root) do
+    case get_note_above(root, 9) do
+      {:ok, note} ->
+        {:ok, get_note_alias(note)}
       {:error, message} ->
         {:error, message}
     end

@@ -54,6 +54,12 @@ angular
                 controllerAs: 'ChordsCtrl',
                 activeNav: 'chords'
             })
+            .when('/chords/:note/:chord', {
+                templateUrl: 'views/chords.html',
+                controller: 'ChordsCtrl',
+                controllerAs: 'ChordsCtrl',
+                activeNav: 'chords'
+            })
             .otherwise({
                 redirectTo: '/'
             });

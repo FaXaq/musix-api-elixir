@@ -11,7 +11,7 @@ defmodule Musix.ChordTest do
 
   test "get a major triad" do
     case get_major_triad("C") do
-      {atom, chord} ->
+      {atom, _, chord} ->
         assert(["C","E","G"] === chord)
         assert(atom == :ok)
     end
@@ -19,7 +19,7 @@ defmodule Musix.ChordTest do
 
   test "get a minor triad" do
     case get_minor_triad("C") do
-      {atom, chord} ->
+      {atom, _, chord} ->
         assert(["C","Eb","G"] === chord)
         assert(atom == :ok)
     end
@@ -27,7 +27,7 @@ defmodule Musix.ChordTest do
 
   test "get an augmented triad" do
     case get_augmented_triad("G") do
-      {atom, chord} ->
+      {atom, _, chord} ->
         assert(["G","B","Ds"] === chord)
         assert(atom == :ok)
     end
@@ -35,7 +35,7 @@ defmodule Musix.ChordTest do
 
   test "get a diminished triad" do
     case get_diminished_triad("G") do
-      {atom, chord} ->
+      {atom, _, chord} ->
         assert(["G","Bb","Db"] === chord)
         assert(atom == :ok)
     end
@@ -43,7 +43,7 @@ defmodule Musix.ChordTest do
 
   test "get a dominant seventh" do
     case get_dominant_seventh("Ab") do
-      {atom, chord} ->
+      {atom, _, chord} ->
         assert(["Ab","C","Ds","Fs"] === chord)
         assert(atom == :ok)
     end

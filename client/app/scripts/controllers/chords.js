@@ -27,31 +27,44 @@ angular.module('musix')
                    method: 'GET',
                    url: 'http://localhost:4000/api/v1/chords/' + chord + '/' + root
                }).then(function successCallback(response) {
+                   chords[chord].desc = response.data.desc[chord];
                    chords[chord].chord = response.data.chord;
+                   $scope.chords = chords;
                }, function errorCallback() {
                    $scope.error = "couldn't load specific chord, error";
                });
            }
 
-           var chords = {};
-           $http({
-               method: 'GET',
-               url: 'http://localhost:4000/api/v1/chords'
-           }).then(function successCallback(response) {
-               var allChords = response.data.chords;
-               for (var n in allChords) {
-                   chords[n] = allChords[n];
-               }
+           var chords = {},
+               root = $routeParams.note,
+               chord = $routeParams.chord;
 
-               if ($routeParams.note) {
-                   $scope.root = $routeParams.note;
-                   getAllChords(chords, $routeParams.note, $scope, $http);
-               }
+           if (root && chord) {
+               $scope.root = root;
+               $scope.chord = chord;
+               chords = {};
+               getChord(chords, $routeParams.note, $routeParams.chord);
+           } else {
+               $http({
+                   method: 'GET',
+                   url: 'http://localhost:4000/api/v1/chords'
+               }).then(function successCallback(response) {
+                   chords = response.data.desc;
 
-               $scope.chords = chords;
-           }, function errorCallback() {
-               $scope.error = "couldn't load the notes, error";
-           });
+                   if (root) {
+                       getAllChords(chords, $routeParams.note);
+                   }
 
-           $scope.$route = $route;
+                   $scope.chords = chords;
+
+               }, function errorCallback() {
+                   $scope.error = "couldn't load the notes, error";
+               });
+           }
+
+           if (root) {
+               $scope.root = root.replace("s","#");
+           }
+
+           $scope.chords = chords;
        });
