@@ -30,13 +30,7 @@ defmodule Musix.Router do
 
     get "/chords/", ChordController, :index
 
-    #major
-    get "/chords/major/:root", ChordController, :major_triad
-    get "/chords/aug/:root", ChordController, :aug_triad
-    get "/chords/7/:root", ChordController, :dominant_seventh
-
-    #minor
-    get "/chords/minor/:root", ChordController, :minor_triad
-    get "/chords/dim/:root", ChordController, :dim_triad
+    get "/chords/:root/:chord", ChordController, :get
+    get "/chords/:root/", ChordController, :get_all_chords
   end
 end

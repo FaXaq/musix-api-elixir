@@ -16,6 +16,20 @@ defmodule Musix.Chord do
     @chords
   end
 
+  def get_chords(root) do
+    {
+      :ok,
+      (for {k, v} <- @chords, into: %{}, do: {k, modify_chord(k, get_chord(k, root))})
+    }
+  end
+
+  def modify_chord(chord, value) do
+    case value do
+      {:ok, new} ->
+        Map.put(@chords[chord], "chord", new[chord]["chord"])
+    end
+  end
+
   def validate_chord(chord) do
     case Map.get(@chords, chord) do
       nil ->
@@ -50,8 +64,10 @@ defmodule Musix.Chord do
           {:ok, fifth} ->
             {
               :ok,
-              %{"major" => @chords["major"]},
-              [root, third, fifth]
+              %{"major" => Map.merge(@chords["major"],
+                %{
+                  "chord" => [root, third, fifth]
+                })}
             }
           {:error, message} ->
             {
@@ -75,8 +91,10 @@ defmodule Musix.Chord do
           {:ok, fifth} ->
             {
               :ok,
-              %{"minor" => @chords["minor"]},
-              [root, third, fifth]
+              %{"minor" => Map.merge(@chords["minor"],
+                %{
+                  "chord" => [root, third, fifth]
+                })}
             }
           {:error, message} ->
             {
@@ -100,8 +118,10 @@ defmodule Musix.Chord do
           {:ok, fifth} ->
             {
               :ok,
-              %{"aug" => @chords["aug"]},
-              [root, third, fifth]
+              %{"aug" => Map.merge(@chords["aug"],
+                %{
+                  "chord" => [root, third, fifth]
+                })}
             }
           {:error, message} ->
             {
@@ -125,8 +145,10 @@ defmodule Musix.Chord do
           {:ok, fifth} ->
             {
               :ok,
-              %{"dim" => @chords["dim"]},
-              [root, third, fifth]
+              %{"dim" => Map.merge(@chords["dim"],
+                %{
+                  "chord" => [root, third, fifth]
+                })}
             }
           {:error, message} ->
             {
@@ -145,13 +167,15 @@ defmodule Musix.Chord do
   ## a dominant seventh chord is composed by a root note, a major third, a perfect fifth and a seventh
   def get_dominant_seventh(root) do
     case get_major_triad(root) do
-      {:ok, _, chord} ->
+      {:ok, chord} ->
         case get_minor_seventh(root) do
           {:ok, seventh} ->
             {
               :ok,
-              %{"7" => @chords["7"]},
-              chord ++ [seventh]
+              %{"7" => Map.merge(@chords["aug"],
+                %{
+                  "chord" => chord["major"]["chord"] ++ [seventh]
+                })}
             }
         end
       {:error, message} ->
@@ -168,3 +192,37 @@ defmodule Musix.Chord do
     end
   end
 end
+
+
+%{
+  "7" =>
+  %{
+    "chord" => ["Ab", "C", "Ds" | "Fs"],
+    "long" => "dominant seventh",
+    "long_desc" => "a major triad with a seventh."
+  },
+  "aug" =>
+    %{
+      "chord" => ["Ab", "C", "E"],
+      "long" => "augmented triad",
+      "long_desc" => "a root note (the note you gave at first), a major third and a augmented fifth"
+    },
+  "dim" =>
+    %{
+      "chord" => ["Ab", "B", "D"],
+      "long" => "diminished triad",
+      "long_desc" => "a root note (the note you gave at first), a minor third and a diminished fifth"
+    },
+  "major" =>
+    %{
+      "chord" => ["Ab", "C", "Ds"],
+      "long" => "major triad",
+      "long_desc" => "a root note (the note you gave at first, a major third and a perfect fifth"
+    },
+  "minor" =>
+    %{
+      "chord" => ["Ab", "B", "Ds"],
+      "long" => "minor triad",
+      "long_desc" => "a root note (the note you gave at first), a minor third and a perfect fifth"
+    }
+}
