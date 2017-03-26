@@ -1,4 +1,6 @@
 defmodule Musix.Intervals do
+  use Musix.Note
+
   # thanks to https://en.wikipedia.org/wiki/Interval_(music)
   @intervals %{
     "P1" => %{"semitones" => 0,
@@ -107,36 +109,83 @@ defmodule Musix.Intervals do
               "alt-short" => ""}
   }
 
-    def get_intervals do
-      {:ok, @intervals}
-    end
+  def get_intervals do
+    {:ok, @intervals}
+  end
 
-    def get_interval(name) do
-      case Map.has_key?(@intervals, name) do
-        true ->
-          {:ok, @intervals[name]}
-        false ->
-          {:error, "Cannot find interval : " <> name}
-      end
+  def get_interval(name) do
+    case Map.has_key?(@intervals, name) do
+      true ->
+        {:ok, @intervals[name]}
+      false ->
+        {:error, "Cannot find interval : " <> name}
     end
+  end
 
-    def get_interval_semitones(name) do
-      case get_interval(name) do
-        {:ok, interval} ->
-          case Map.has_key?(interval, "semitones") do
-            true ->
-              {:ok, interval["semitones"]}
-            false ->
-              {:error, "Cannot find semitones for interval : " <> name}
-          end
-        {:error, message} ->
-          {:error, message}
-      end
+  def get_interval_semitones(name) do
+    case get_interval(name) do
+      {:ok, interval} ->
+        case Map.has_key?(interval, "semitones") do
+          true ->
+            {:ok, interval["semitones"]}
+          false ->
+            {:error, "Cannot find semitones for interval : " <> name}
+        end
+      {:error, message} ->
+        {:error, message}
     end
+  end
 
-    defmacro __using__(_) do
-      quote do
-        import Musix.Intervals
-      end
+  ## get note from interval and root
+  def get_note(root, interval) do
+    case get_interval_semitones(interval) do
+      {:ok, interval} ->
+        case get_note_above(root, interval) do
+          {:ok, note} ->
+            {:ok, get_note_alias_if_needed(root, note)}
+          {:error, message} ->
+            {:error, message}
+        end
+      {:error, message} ->
+        {:error, message}
     end
+  end
+
+  ##########
+  ## misc ##
+  ##########
+
+  ## get semi-tones between notes
+  def get_semi_tones_between(root, note) do
+    case root === note do
+      true ->
+        0
+      false ->
+        get_semi_tones_between(root, note, 0)
+    end
+  end
+
+  ## get semi-tones between notes
+  def get_semi_tones_between(root, note, interval) do
+    case get_sharpened_note(root) do
+      {:ok, new_root} ->
+        case compare_notes(new_root, note) do
+          true ->
+            interval + 1
+          false ->
+            get_semi_tones_between(new_root, note, interval + 1)
+        end
+    end
+  end
+
+  ## get semi-tones between notes
+  def get_tones_between(root, note) do
+    get_semi_tones_between(root,note) / 2
+  end
+
+  defmacro __using__(_) do
+    quote do
+      import Musix.Intervals
+    end
+  end
 end

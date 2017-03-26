@@ -1,31 +1,44 @@
 defmodule Musix.Chord do
   use Musix.Note
+  use Musix.Intervals
 
   @chords %{
     "major" => %{"long" => "major triad",
-                 "long_desc" => "a root note (the note you gave at first, a major third and a perfect fifth"},
+                 "long_desc" => "a major third and a perfect fifth",
+                "intervals" => ["P1","M3","P5"]},
     "minor" => %{"long" => "minor triad",
-                 "long_desc" => "a root note (the note you gave at first), a minor third and a perfect fifth"},
+                 "long_desc" => "a minor third and a perfect fifth",
+                 "intervals" => ["P1","m3","P5"]},
     "aug" => %{"long" => "augmented triad",
-               "long_desc" => "a root note (the note you gave at first), a major third and a augmented fifth"},
+               "long_desc" => "a major third and a augmented fifth",
+               "intervals" => ["P1","M3","A5"]},
     "dim" => %{"long" => "diminished triad",
-               "long_desc" => "a root note (the note you gave at first), a minor third and a diminished fifth"},
+               "long_desc" => "a minor third and a diminished fifth",
+               "intervals" => ["P1","m3","d5"]},
     "7" => %{"long" => "dominant seventh",
-             "long_desc" => "a major triad with a minor seventh."},
+             "long_desc" => "a major triad with a minor seventh.",
+             "intervals" => ["P1","M3","P5","m7"]},
     "M7" => %{"long" => "major seventh",
-              "long_desc" => "a major triad with a major seventh."},
+              "long_desc" => "a major triad with a major seventh.",
+              "intervals" => ["P1","M3","P5","M7"]},
     "m7" => %{"long" => "minor seventh",
-              "long_desc" => "a minor triad with a minor seventh."},
+              "long_desc" => "a minor triad with a minor seventh.",
+              "intervals" => ["P1","m3","P5","m7"]},
     "hdim7" => %{"long" => "half-diminished seventh",
-                 "long_desc" => "a diminished triad with a minor seventh."},
+                 "long_desc" => "a diminished triad with a minor seventh.",
+                 "intervals" => ["P1","m3","d5","m7"]},
     "dim7" => %{"long" => "diminished seventh",
-                "long_desc" => "a diminished triad with a diminished seventh."},
+                "long_desc" => "a diminished triad with a diminished seventh",
+                "intervals" => ["P1","m3","d5","d7"]},
     "mM7" => %{"long" => "minor-major seventh",
-               "long_desc" => "a minor triad with a major seventh."},
+               "long_desc" => "a minor triad with a major seventh.",
+                 "intervals" => ["P1","m3","P5","M7"]},
     "augM7" => %{"long" => "augmented major seventh",
-                 "long_desc" => "an augmented triad with a major seventh."},
+                 "long_desc" => "an augmented triad with a major seventh.",
+                 "intervals" => ["P1","M3","A5","M7"]},
     "aug7" => %{"long" => "augmented seventh",
-                "long_desc" => "an augmented triad with a minor seventh."}
+                "long_desc" => "an augmented triad with a minor seventh.",
+                "intervals" => ["P1","M3","P5","m7"]}
   }
 
   def get_chords do
@@ -39,7 +52,7 @@ defmodule Musix.Chord do
       @chords, into: %{}, do: {
         chord_name,
         add_chord_to_chords(
-          chord_name, get_chord(chord_name, root)
+          chord_name, build_chord(chord_name, root)
         )})
     }
   end
@@ -47,9 +60,9 @@ defmodule Musix.Chord do
   def add_chord_to_chords(chord, value) do
     case value do
       {:ok, new} ->
-        Map.put(@chords[chord], "chord", new[chord]["chord"])
+        Map.put(@chords[chord], "notes", new)
       {:error, message} ->
-        IO.puts(message)
+        {:error, message}
     end
   end
 
@@ -63,323 +76,46 @@ defmodule Musix.Chord do
   end
 
   def get_chord(chord, root) do
-    case chord do
-      "major" ->
-        get_major_triad_c(root)
-      "minor" ->
-        get_minor_triad_c(root)
-      "aug" ->
-        get_augmented_triad_c(root)
-      "dim" ->
-        get_diminished_triad_c(root)
-      "7" ->
-        get_dominant_seventh_c(root)
-      "M7" ->
-        get_major_seventh_c(root)
-      "m7" ->
-        get_minor_seventh_c(root)
-      "hdim7" ->
-        get_half_diminished_seventh_c(root)
-      "dim7" ->
-        get_diminished_seventh_c(root)
-      "mM7" ->
-        get_minor_major_seventh_c(root)
-      "augM7" ->
-        get_augmented_major_seventh_c(root)
-      "aug7" ->
-        get_augmented_seventh_c(root)
-      _ ->
-        {:error, "Unknown chord"}
-    end
-  end
-
-  ## a major triad is composed by a root note, a major third and a perfect fifth
-  def get_major_triad_c(root) do
-    case get_major_third(root) do
-      {:ok, third} ->
-        case get_perfect_fifth(root) do
-          {:ok, fifth} ->
-            {
-              :ok,
-              %{"major" => Map.merge(@chords["major"],
-                %{
-                  "chord" => [root, third, fifth]
-                })}
-            }
+    case Map.has_key?(@chords, chord) do
+      true ->
+        case build_chord(chord, root) do
+          {:ok, built_chord} ->
+            {:ok, add_chord_to_chords(chord, {:ok, built_chord})}
           {:error, message} ->
-            {
-              :error,
-              "Error while obtaining the fifth : " <> message
-            }
+            {:error, message}
         end
-      {:error, message} ->
-        {
-          :error,
-          "Error while obtaining the fifth : " <> message
-        }
+      false ->
+        {:error, "Unknown chord : " <> chord}
     end
   end
 
-  ## a minor triad is composed by a root note, a minor third and a perfect fifth
-  def get_minor_triad_c(root) do
-    case get_minor_third(root) do
-      {:ok, third} ->
-        case get_perfect_fifth(root) do
-          {:ok, fifth} ->
-            {
-              :ok,
-              %{"minor" => Map.merge(@chords["minor"],
-                %{
-                  "chord" => [root, third, fifth]
-                })}
-            }
-          {:error, message} ->
-            {
-              :error,
-              "Error while obtaining the fifth : " <> message
-            }
-        end
+  def build_chord(chord, root) do
+    case get_chord_intervals(chord) do
+      {:ok, intervals} ->
+        {:ok, Enum.into(intervals, [], fn interval ->
+            case get_note(root, interval) do
+              {:ok, note} ->
+                note
+              {:error, message} ->
+                message
+            end
+          end)}
       {:error, message} ->
-        {
-          :error,
-          "Error while obtaining the fifth : " <> message
-        }
+        {:error, message}
     end
   end
 
-  ## an augmented triad is composed by a root note, a major third and an augmented fifth
-  def get_augmented_triad_c(root) do
-    case get_major_third(root) do
-      {:ok, third} ->
-        case get_augmented_fifth(root) do
-          {:ok, fifth} ->
-            {
-              :ok,
-              %{"aug" => Map.merge(@chords["aug"],
-                %{
-                  "chord" => [root, third, fifth]
-                })}
-            }
-          {:error, message} ->
-            {
-              :error,
-              "Error while obtaining the fifth : " <> message
-            }
+  def get_chord_intervals(chord) do
+    case Map.has_key?(@chords, chord) do
+      true ->
+        case Map.has_key?(@chords[chord], "intervals") do
+          true ->
+            {:ok, @chords[chord]["intervals"]}
+          false ->
+            {:error, "Cannot find intervals for chord : " <> chord}
         end
-      {:error, message} ->
-        {
-          :error,
-          "Error while obtaining the fifth : " <> message
-        }
-    end
-  end
-
-  ## a diminished triad is composed by a root note, a major third and a diminished fifth
-  def get_diminished_triad_c(root) do
-    case get_minor_third(root) do
-      {:ok, third} ->
-        case get_diminished_fifth(root) do
-          {:ok, fifth} ->
-            {
-              :ok,
-              %{"dim" => Map.merge(@chords["dim"],
-                %{
-                  "chord" => [root, third, fifth]
-                })}
-            }
-          {:error, message} ->
-            {
-              :error,
-              "Error while obtaining the fifth : " <> message
-            }
-        end
-      {:error, message} ->
-        {
-          :error,
-          "Error while obtaining the fifth : " <> message
-        }
-    end
-  end
-
-  ## a dominant seventh chord is composed by a root note, a major third, a perfect fifth and a seventh
-  def get_dominant_seventh_c(root) do
-    case get_major_triad_c(root) do
-      {:ok, chord} ->
-        case get_minor_seventh(root) do
-          {:ok, seventh} ->
-            {
-              :ok,
-              %{"7" => Map.merge(@chords["7"],
-                %{
-                  "chord" => chord["major"]["chord"] ++ [seventh]
-                })}
-            }
-        end
-      {:error, message} ->
-        {
-          :error,
-          "Error while obtaning the major triad : " <> message
-        }
-    end
-  end
-
-  ## a major seventh chord is composed by a root note, a major third, a perfect fifth and a seventh
-  def get_major_seventh_c(root) do
-    case get_major_triad_c(root) do
-      {:ok, chord} ->
-        case get_major_seventh(root) do
-          {:ok, seventh} ->
-            {
-              :ok,
-              %{"M7" => Map.merge(@chords["M7"],
-                %{
-                  "chord" => chord["major"]["chord"] ++ [seventh]
-                })}
-            }
-        end
-      {:error, message} ->
-        {
-          :error,
-          "Error while obtaning the major triad : " <> message
-        }
-    end
-  end
-
-  ## a minor seventh chord is composed by a root note, a major third, a perfect fifth and a seventh
-  def get_minor_seventh_c(root) do
-    case get_minor_triad_c(root) do
-      {:ok, chord} ->
-        case get_minor_seventh(root) do
-          {:ok, seventh} ->
-            {
-              :ok,
-              %{"m7" => Map.merge(@chords["m7"],
-                %{
-                  "chord" => chord["minor"]["chord"] ++ [seventh]
-                })}
-            }
-        end
-      {:error, message} ->
-        {
-          :error,
-          "Error while obtaning the major triad : " <> message
-        }
-    end
-  end
-
-  ## a half-diminished seventh chord is composed by a diminished triad with a minor seventh
-
-  def get_half_diminished_seventh_c(root) do
-    case get_diminished_triad_c(root) do
-      {:ok, chord} ->
-        case get_minor_seventh(root) do
-          {:ok, seventh} ->
-            {
-              :ok,
-              %{"hdim7" => Map.merge(@chords["hdim7"],
-                %{
-                  "chord" => chord["dim"]["chord"] ++ [seventh]
-                })}
-            }
-        end
-      {:error, message} ->
-        {
-          :error,
-          "Error while obtaning the major triad : " <> message
-        }
-    end
-  end
-
-  ## a half-diminished seventh chord is composed by a diminished triad with a minor seventh
-
-  def get_diminished_seventh_c(root) do
-    case get_diminished_triad_c(root) do
-      {:ok, chord} ->
-        case get_diminished_seventh(root) do
-          {:ok, seventh} ->
-            {
-              :ok,
-              %{"dim7" => Map.merge(@chords["dim7"],
-                %{
-                  "chord" => chord["dim"]["chord"] ++ [seventh]
-                })}
-            }
-        end
-      {:error, message} ->
-        {
-          :error,
-          "Error while obtaning the major triad : " <> message
-        }
-    end
-  end
-
-  ## a half-diminished seventh chord is composed by a diminished triad with a minor seventh
-
-  def get_minor_major_seventh_c(root) do
-    case get_minor_triad_c(root) do
-      {:ok, chord} ->
-        case get_major_seventh(root) do
-          {:ok, seventh} ->
-            {
-              :ok,
-              %{"mM7" => Map.merge(@chords["mM7"],
-                %{
-                  "chord" => chord["minor"]["chord"] ++ [seventh]
-                })}
-            }
-        end
-      {:error, message} ->
-        {
-          :error,
-          "Error while obtaning the major triad : " <> message
-        }
-    end
-  end
-
-
-  ## a half-diminished seventh chord is composed by a diminished triad with a minor seventh
-
-  def get_augmented_major_seventh_c(root) do
-    case get_augmented_triad_c(root) do
-      {:ok, chord} ->
-        case get_major_seventh(root) do
-          {:ok, seventh} ->
-            {
-              :ok,
-              %{"augM7" => Map.merge(@chords["augM7"],
-                %{
-                  "chord" => chord["aug"]["chord"] ++ [seventh]
-                })}
-            }
-        end
-      {:error, message} ->
-        {
-          :error,
-          "Error while obtaning the major triad : " <> message
-        }
-    end
-  end
-
-  ## a half-diminished seventh chord is composed by a diminished triad with a minor seventh
-
-  def get_augmented_seventh_c(root) do
-    case get_augmented_triad_c(root) do
-      {:ok, chord} ->
-        case get_minor_seventh(root) do
-          {:ok, seventh} ->
-            {
-              :ok,
-              %{"aug7" => Map.merge(@chords["aug7"],
-                %{
-                  "chord" => chord["aug"]["chord"] ++ [seventh]
-                })}
-            }
-        end
-      {:error, message} ->
-        {
-          :error,
-          "Error while obtaning the major triad : " <> message
-        }
+      false ->
+        {:error, "Cannot find chord : " <> chord}
     end
   end
 
