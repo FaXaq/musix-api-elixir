@@ -18,7 +18,7 @@ angular.module('musix')
                    method: 'GET',
                    url: 'http://localhost:4000/api/v1/chords/' + root
                }).then(function successCallback(response) {
-                   chords = response.data.chords
+                   chords = response.data.chords;
                    $scope.chords = chords;
                }, function errorCallback() {
                    $scope.error = "couldn't load specific chord, error";
@@ -56,7 +56,6 @@ angular.module('musix')
                    url: 'http://localhost:4000/api/v1/chords'
                }).then(function successCallback(response) {
                    chords = response.data.desc;
-
                    if (root) {
                        getAllChords(chords, $routeParams.note);
                    }
@@ -86,6 +85,6 @@ angular.module('musix')
                $scope.root = root.replace("s","#");
            }
 
-           $scope.notes = notes
+           $scope.notes = notes;""
            $scope.chords = chords;
        });
