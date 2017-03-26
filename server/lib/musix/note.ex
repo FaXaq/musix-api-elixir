@@ -8,6 +8,7 @@ defmodule Musix.Note do
                  "Gs" => "Ab", "As" => "Bb", "Cs" => "Db", "Ds" => "Eb", "Fs" => "Gb"}
   @notes_length length Tuple.to_list @notes
 
+
   def get_notes do
     Tuple.to_list @notes
   end
@@ -109,7 +110,6 @@ defmodule Musix.Note do
 
   ## a diminished fifth is 6 semi-tones above root note
   def get_diminished_fifth(root) do
-    note =
       case get_note_above(root, 6) do
         {:ok, note} ->
           {:ok, get_note_alias_if_needed(root, note)}
@@ -180,6 +180,44 @@ defmodule Musix.Note do
   ## misc ##
   ##########
 
+  ## get semi-tones between notes
+  def get_semi_tones_between(root, note) do
+    case root === note do
+      true ->
+        0
+      false ->
+        get_semi_tones_between(root, note, 0)
+    end
+  end
+
+  ## get semi-tones between notes
+  def get_semi_tones_between(root, note, interval) do
+    case get_sharpened_note(root) do
+      {:ok, new_root} ->
+        case compare_notes(new_root, note) do
+          true ->
+            interval + 1
+          false ->
+            get_semi_tones_between(new_root, note, interval + 1)
+        end
+    end
+  end
+
+  ## get semi-tones between notes
+  def get_tones_between(root, note) do
+    get_semi_tones_between(root,note) / 2
+  end
+
+  ## return true if notes are the same
+  def compare_notes(note1, note2) do
+    case note1 === note2 || get_note_alias(note1) === note2 do
+      true ->
+        true
+      false ->
+        false
+    end
+  end
+
   ## flip note if needed
   def get_note_alias_if_needed(root, note) do
     case (String.contains?(root,"b") and String.contains?(note, "s")) or
@@ -203,16 +241,16 @@ defmodule Musix.Note do
   end
 
   ##functions to get note above from root and semi-tones intervals
-  def get_note_above(root, interval) when interval > 0 do
+  def get_note_above(root, semitone) when semitone > 0 do
     case get_sharpened_note(root) do
       {:ok, note} ->
-        get_note_above(note, interval-1)
+        get_note_above(note, semitone-1)
       {:error, message} ->
         {:error, message}
     end
   end
 
-  def get_note_above(root, interval) when interval == 0 do
+  def get_note_above(root, semitone) when semitone == 0 do
     {:ok, root}
   end
 

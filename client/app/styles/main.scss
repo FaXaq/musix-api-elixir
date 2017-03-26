@@ -5,15 +5,17 @@
 @import "components/structure";
 @import "components/text";
 @import "components/footer";
+@import "components-font-awesome/scss/font-awesome.scss";
 
 body, html {
     width:100%;
     height:100vh;
     margin-left:auto;
-    background-color:$main-bg;
+    background-color:black;
 }
 
 body {
     display:flex;
+    overflow:hidden;
     flex-direction:row;
 }

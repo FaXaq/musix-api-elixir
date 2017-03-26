@@ -21,9 +21,14 @@
         <![endif]-->
 
         <!-- Add your site or application content here -->
+        <input type="checkbox" id="nav-checkbox" />
+        <label id="nav-button" for="nav-checkbox">
+          <span></span>
+        </label>
+
         <ul class="nav navbar-nav" role="navigation">
             <li ng-class="{active: $route.current.activeNav == 'home'}">
-                <a href="#/">Home</a>
+                <a href="#/"><i class="fa fa-home"></i></a>
             </li>
             <li ng-class="{active: $route.current.activeNav == 'notes'}">
                 <a ng-href="#/notes">Notes</a>

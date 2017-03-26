@@ -143,4 +143,16 @@ defmodule Musix.NoteTest do
         assert(note === "Ds")
     end
   end
+
+  test "get semi-tones between" do
+    case get_semi_tones_between("A","As") do
+      x ->
+        assert(x === 1)
+    end
+
+    case get_semi_tones_between("A","Ab") do
+      x ->
+        assert(x === 11)
+    end
+  end
 end
