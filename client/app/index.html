@@ -13,6 +13,7 @@
         <!-- endbuild -->
         <!-- build:css(.tmp) styles/main.css -->
         <link rel="stylesheet" href="styles/main.css">
+        <base href="/">
         <!-- endbuild -->
     </head>
     <body ng-app="musix">
@@ -23,28 +24,28 @@
         <!-- Add your site or application content here -->
         <input type="checkbox" id="nav-checkbox" />
         <label id="nav-button" for="nav-checkbox">
-          <span></span>
+            <span></span>
         </label>
 
         <ul class="nav navbar-nav" role="navigation">
             <li ng-class="{active: $route.current.activeNav == 'home'}">
-                <a href="#/"><i class="fa fa-home"></i></a>
+                <a href="/"><i class="fa fa-home"></i></a>
             </li>
             <li ng-class="{active: $route.current.activeNav == 'notes'}">
-                <a ng-href="#/notes">Notes</a>
+                <a ng-href="/notes">Notes</a>
             </li>
             <li ng-class="{active: $route.current.activeNav == 'chords'}">
-                <a ng-href="#/chords">Chords</a>
+                <a ng-href="/chords">Chords</a>
             </li>
             <li ng-class="{active: $route.current.activeNav == 'about'}">
-                <a ng-href="#/about">About</a>
+                <a ng-href="/about">About</a>
             </li>
         </ul>
 
         <div class="main">
             <div ng-view=""></div>
             <div class="footer">
-              <p>from musix</p>
+                <p>from musix</p>
             </div>
         </div>
 

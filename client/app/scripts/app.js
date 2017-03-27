@@ -20,8 +20,6 @@ angular
         'ngTouch'
     ])
     .config(function ($routeProvider, $locationProvider) {
-
-        /* get rid of #2F formating of `/` */
         $locationProvider.hashPrefix('');
         $routeProvider
             .when('/', {
@@ -63,4 +61,5 @@ angular
             .otherwise({
                 redirectTo: '/'
             });
+        $locationProvider.html5Mode(true);
     });
