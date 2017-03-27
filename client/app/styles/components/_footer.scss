@@ -1,12 +1,1 @@
 @import "vars/color";
-.footer {
-    &::before {
-        content:"";
-        height:1px;
-
-    }
-    padding:1em 0em;
-    background-color:$footer-bg;
-    width:100%;
-    text-align:center;
-}
