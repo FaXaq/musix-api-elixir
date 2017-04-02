@@ -13,7 +13,7 @@ defmodule Musix.NoteController do
     note = params["note"]
 
     case get_note_index(note) do
-        #when not is invalid
+        #when note is invalid
       {:error, message} ->
         error_400 conn, message
 

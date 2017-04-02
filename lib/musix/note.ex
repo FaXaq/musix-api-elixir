@@ -22,6 +22,17 @@ defmodule Musix.Note do
     end
   end
 
+  def get_note_index(note, order) do
+    case order do
+      :asc ->
+        notes = Tuple.to_list @notes
+        {:ok, Enum.find_index(notes, fn(x) -> x == note end)}
+      :desc ->
+        notes = Tuple.to_list @notes
+        {:ok, Enum.find_index(notes, fn(x) -> x == note end)}
+    end
+  end
+
   def get_flattened_note(note) do
     # since there is two description of a note sometimes (sharp or flat), ensure
     # interval is well done
@@ -72,78 +83,26 @@ defmodule Musix.Note do
     end
   end
 
-  def get_note_index(note, order) do
-    case order do
-      :asc ->
-        notes = Tuple.to_list @notes
-        {:ok, Enum.find_index(notes, fn(x) -> x == note end)}
-      :desc ->
-        notes = Tuple.to_list @notes
-        {:ok, Enum.find_index(notes, fn(x) -> x == note end)}
+  ## return true if notes are the same
+  def compare_notes(note1, note2) do
+    case note1 === note2 || get_note_alias(note1) === note2 do
+      true ->
+        true
+      false ->
+        false
     end
   end
 
-  #######
-  ## 5 ##
-  #######
-
-  ## a perfect fifth is 7 semi-tones above root note
-  def get_perfect_fifth(root) do
-    case get_note_above(root, 7) do
-      {:ok, note} ->
-        {:ok, note}
-      {:error, message} ->
-        {:error, message}
+  ## flip note if needed
+  def get_note_alias_if_needed(root, note) do
+    case (String.contains?(root,"b") and String.contains?(note, "s")) or
+      (String.contains?(root,"s") and String.contains?(note, "b"))do
+      true ->
+        get_note_alias(note)
+      false ->
+        note
     end
   end
-
-  ## a augmented fifth is 8 semi-tones above root note
-  def get_augmented_fifth(root) do
-    case get_note_above(root, 8) do
-      {:ok, note} ->
-        {:ok, note}
-      {:error, message} ->
-        {:error, message}
-    end
-  end
-
-  ## a diminished fifth is 6 semi-tones above root note
-  def get_diminished_fifth(root) do
-    case get_note_above(root, 6) do
-      {:ok, note} ->
-        {:ok, get_note_alias(note)}
-      {:error, message} ->
-        {:error, message}
-    end
-  end
-
-  #######
-  ## 3 ##
-  #######
-
-  ## a major third is 4 semi-tones above root note
-  def get_major_third(root) do
-    case get_note_above(root, 4) do
-      {:ok, note} ->
-        {:ok, note}
-      {:error, message} ->
-        {:error, message}
-    end
-  end
-
-  ## a minor third is 3 semi-tones above root note
-  def get_minor_third(root) do
-    case get_note_above(root, 3) do
-      {:ok, note} ->
-        {:ok, get_note_alias(note)}
-      {:error, message} ->
-        {:error, message}
-    end
-  end
-
-  ##########
-  ## misc ##
-  ##########
 
   ## sometimes in minor chords essentially, we need alias for flat notes instead of sharp ones
   ## (Bb instead of As for instance)
@@ -157,16 +116,16 @@ defmodule Musix.Note do
   end
 
   ##functions to get note above from root and semi-tones intervals
-  def get_note_above(root, interval) when interval > 0 do
+  def get_note_above(root, semitone) when semitone > 0 do
     case get_sharpened_note(root) do
       {:ok, note} ->
-        get_note_above(note, interval-1)
+        get_note_above(note, semitone-1)
       {:error, message} ->
         {:error, message}
     end
   end
 
-  def get_note_above(root, interval) when interval == 0 do
+  def get_note_above(root, semitone) when semitone == 0 do
     {:ok, root}
   end
 
