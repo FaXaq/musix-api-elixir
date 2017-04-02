@@ -1,11 +1,11 @@
 # App artifacts
-/server/_build
-/server/db
-/server/deps
-/server/*.ez
+/_build
+/db
+/deps
+/*.ez
 
 # Generated on crash by the VM
-/server/erl_crash.dump
+/erl_crash.dump
 
 # The config/prod.secret.exs file by default contains sensitive
 # data and you should not commit it into version control.
@@ -13,7 +13,7 @@
 # Alternatively, you may comment the line below and commit the
 # secrets file as long as you replace its contents by environment
 # variables.
-/server/config/prod.secret.exs
+/config/prod.secret.exs
 
 \#*\#
 
