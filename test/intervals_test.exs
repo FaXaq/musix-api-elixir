@@ -33,4 +33,26 @@ defmodule Musix.IntervalsTest do
         assert(x === 11)
     end
   end
+
+  test "apply interval" do
+    case get_note("C", "m7") do
+      {atom, note} ->
+        assert(atom === :ok)
+        assert(note == "Bb")
+    end
+
+    case get_note("C", "M7") do
+      {atom, note} ->
+        assert(atom === :ok)
+        assert(note == "B")
+    end
+  end
+
+  test "get parent note" do
+    case get_parent_note("C", "m7") do
+      {atom, note} ->
+        assert(atom === :ok)
+        assert(note == "B")
+    end
+  end
 end

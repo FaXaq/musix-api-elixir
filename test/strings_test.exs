@@ -2,7 +2,7 @@ defmodule Musix.StringsTest do
   use ExUnit.Case
   use Musix.Strings
 
-  Test "get position on string" do
+  test "get position on string" do
     case get_position_on_string("C","E") do
       {atom, x} ->
         assert(atom === :ok)

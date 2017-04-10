@@ -28,7 +28,7 @@ defmodule Musix.NoteTest do
     end
   end
 
-  test "Sharpen note" do
+  test "get sharpened note" do
     case get_sharpened_note("Gb") do
       {atom, note} ->
         assert(atom == :ok)
@@ -54,7 +54,7 @@ defmodule Musix.NoteTest do
     end
   end
 
-  test "Flatten note" do
+  test "get flattened note" do
     case get_flattened_note("Ab") do
       {atom, note} ->
         assert(atom == :ok)
@@ -77,6 +77,34 @@ defmodule Musix.NoteTest do
       {atom, note} ->
         assert(atom == :ok)
         assert(note === "C")
+    end
+  end
+
+  test "flatten note" do
+    case flatten_note("A") do
+      {atom, note} ->
+        assert(atom == :ok)
+        assert(note === "Ab")
+    end
+
+    case flatten_note("As") do
+      {atom, note} ->
+        assert(atom == :ok)
+        assert(note === "A")
+    end
+  end
+
+  test "sharpen note" do
+    case sharpen_note("As") do
+      {atom, note} ->
+        assert(atom == :ok)
+        assert(note === "Ass")
+    end
+
+    case sharpen_note("Ass") do
+      {atom, note} ->
+        assert(atom == :ok)
+        assert(note === "Bs")
     end
   end
 

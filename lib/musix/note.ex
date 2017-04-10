@@ -5,7 +5,11 @@ defmodule Musix.Note do
   # constants
   @notes {"Ab","A","As","Bb","B","C","Cs","Db","D","Ds","Eb","E","F","Fs","Gb","G","Gs"}
   @notes_alias %{"Ab" => "Gs", "Bb" => "As", "Db" => "Cs", "Eb" => "Ds", "Gb" => "Fs",
-                 "Gs" => "Ab", "As" => "Bb", "Cs" => "Db", "Ds" => "Eb", "Fs" => "Gb"}
+                 "Gs" => "Ab", "As" => "Bb", "Cs" => "Db", "Ds" => "Eb", "Fs" => "Gb",
+                 "Cb" => "B", "Bs" => "C", "Fb" => "E", "Es" => "F",
+                 "B" => "Cb", "C" => "Bb", "E" => "Fb", "F" => "Es",
+                 "Abb" => "G", "Bbb" => "A", "Cbb" => "Bb", "Dbb" => "C", "Ebb" => "D", "Fbb" => "Eb", "Gbb" => "F",
+                 "Gss" => "A", "Ass" => "B", "Bss" => "Cs", "Css" => "D", "Dss" => "E", "Ess" => "Fs", "Fss" => "G"}
   @notes_length length Tuple.to_list @notes
 
   def get_notes do
@@ -33,6 +37,27 @@ defmodule Musix.Note do
     end
   end
 
+  # flatten note given in parameter
+  def flatten_note(note) do
+    case get_note_index(note, :desc) do
+      {:ok, _} ->
+        #to flatten note append b at the end
+        case String.contains?(note, "s") do
+          true ->
+            get_flattened_note(note)
+          false ->
+            {:ok, note <> "b"}
+        end
+      {:error, _} ->
+        case get_note_alias(note) do
+          x when x === note ->
+            {:error, "Please enter a valid note" <> note}
+          x ->
+            flatten_note(x)
+        end
+    end
+  end
+
   def get_flattened_note(note) do
     # since there is two description of a note sometimes (sharp or flat), ensure
     # interval is well done
@@ -54,6 +79,26 @@ defmodule Musix.Note do
         {:ok, elem(@notes,@notes_length-interval)}
       _ ->
         {:error, "Couldn't get the flattened note from " <> note}
+    end
+  end
+
+  def sharpen_note(note) do
+    case get_note_index(note, :desc) do
+      {:ok, _} ->
+        #to flatten note append b at the end
+        case String.contains?(note, "b") do
+          true ->
+            get_sharpened_note(note)
+          false ->
+            case String.contains?(note, "ss") do
+              true ->
+                sharpen_note(get_note_alias(note))
+              false ->
+                {:ok, note <> "s"}
+            end
+        end
+      {:error, _} ->
+        {:error, "Couldn't sharpen the note " <> note}
     end
   end
 
@@ -96,7 +141,7 @@ defmodule Musix.Note do
   ## flip note if needed
   def get_note_alias_if_needed(root, note) do
     case (String.contains?(root,"b") and String.contains?(note, "s")) or
-      (String.contains?(root,"s") and String.contains?(note, "b"))do
+      (String.contains?(root,"s") and String.contains?(note, "b")) do
       true ->
         get_note_alias(note)
       false ->
@@ -126,6 +171,49 @@ defmodule Musix.Note do
   end
 
   def get_note_above(root, semitone) when semitone == 0 do
+    {:ok, root}
+  end
+
+  # altered note
+  def get_altered_note_above(root, semitone) when semitone > 0 do
+     case sharpen_note(root) do
+      {:ok, note} ->
+        get_note_above(note, semitone-1)
+      {:error, message} ->
+        {:error, message}
+    end
+  end
+
+  # altered note
+  def get_altered_note_above(root, semitone) when semitone == 0 do
+    {:ok, root}
+  end
+
+  ##functions to get note below from root and semi-tones intervals
+  def get_note_below(root, semitone) when semitone < 0 do
+    case get_flattened_note(root) do
+      {:ok, note} ->
+        get_note_below(note, semitone+1)
+      {:error, message} ->
+        {:error, message}
+    end
+  end
+
+  def get_note_below(root, semitone) when semitone == 0 do
+    {:ok, root}
+  end
+
+  ##functions to get note below from root and semi-tones intervals
+  def get_altered_note_below(root, semitone) when semitone < 0 do
+    case flatten_note(root) do
+      {:ok, note} ->
+        get_note_below(note, semitone+1)
+      {:error, message} ->
+        {:error, message}
+    end
+  end
+
+  def get_altered_note_below(root, semitone) when semitone == 0 do
     {:ok, root}
   end
 

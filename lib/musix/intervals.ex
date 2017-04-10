@@ -7,103 +7,128 @@ defmodule Musix.Intervals do
               "name" => "Perfect unison",
               "alt" => "",
               "alt_short" => ""},
-    "d2" => %{"semitones" => 0,
+    "d2" => %{"parent" => "M2",
+              "semitones" => -2,
               "name" => "Diminished second",
               "alt" => "",
               "alt_short" => ""},
-    "m2" => %{"semitones" => 1,
+    "m2" => %{"parent" => "M2",
+              "semitones" => -1,
               "name" => "Minor second",
               "alt" => ["Semitone","half tone", "half step"],
               "alt_short" => "S"},
-    "A1" => %{"semitones" => 1,
+    "A1" => %{"parent" => "P1",
+              "semitones" => 1,
               "name" => "Augmented unison",
               "alt" => ["Semitone","half tone", "half step"],
               "alt_short" => "S"},
-    "M2" => %{"semitones" => 2,
+    "M2" => %{"parent" => "P1",
+              "semitones" => 2,
               "name" => "Major second",
               "alt" => ["Tone","whole tone", "whole step"],
               "alt_short" => "T"},
-    "d3" => %{"semitones" => 2,
+    "d3" => %{"parent" => "M3",
+              "semitones" => -2,
               "name" => "Diminished third",
               "alt" => ["Tone","whole tone", "whole step"],
               "alt_short" => "T"},
-    "m3" => %{"semitones" => 3,
+    "m3" => %{"parent" => "M3",
+              "semitones" => -1,
               "name" => "Minor third",
               "alt" => "",
               "alt-short" => ""},
-    "A2" => %{"semitones" => 3,
+    "A2" => %{"parent" => "M2",
+              "semitones" => 1,
               "name" => "Augmented second",
               "alt" => "",
               "alt-short" => ""},
-    "M3" => %{"semitones" => 4,
+    "M3" => %{"parent" => "P1",
+              "semitones" => 4,
               "name" => "Minor third",
               "alt" => "",
               "alt-short" => ""},
-    "d4" => %{"semitones" => 4,
+    "d4" => %{"parent" => "P4",
+              "semitones" => -1,
               "name" => "Diminished fourth",
               "alt" => "",
               "alt-short" => ""},
-    "P4" => %{"semitones" => 5,
+    "P4" => %{"parent" => "P1",
+              "semitones" => 5,
               "name" => "Perfect fourth",
               "alt" => "",
               "alt-short" => ""},
-    "A3" => %{"semitones" => 5,
+    "A3" => %{"parent" => "M3",
+              "semitones" => 1,
               "name" => "Augmented third",
               "alt" => "",
               "alt-short" => ""},
-    "d5" => %{"semitones" => 6,
+    "d5" => %{"parent" => "P5",
+              "semitones" => -1,
               "name" => "Diminished fifth",
               "alt" => "Tritone",
               "alt-short" => "TT"},
-    "A4" => %{"semitones" => 6,
+    "A4" => %{"parent" => "P4",
+              "semitones" => 1,
               "name" => "Augmented fourth",
               "alt" => "Tritone",
               "alt-short" => "TT"},
-    "P5" => %{"semitones" => 7,
+    "P5" => %{"parent" => "P1",
+              "semitones" => 7,
               "name" => "Perfect fifth",
               "alt" => "",
               "alt-short" => ""},
-    "d6" => %{"semitones" => 7,
+    "d6" => %{"parent" => "M6",
+              "semitones" => -2,
               "name" => "Diminished sixth",
               "alt" => "",
               "alt-short" => ""},
-    "m6" => %{"semitones" => 8,
+    "m6" => %{"parent" => "M6",
+              "semitones" => -1,
               "name" => "Minor sixth",
               "alt" => "",
               "alt-short" => ""},
-    "A5" => %{"semitones" => 8,
+    "A5" => %{"parent" => "P5",
+              "semitones" => 1,
               "name" => "Augmented fifth",
               "alt" => "",
               "alt-short" => ""},
-    "M6" => %{"semitones" => 9,
+    "M6" => %{"parent" => "P1",
+              "semitones" => 9,
               "name" => "Major sixth",
               "alt" => "",
               "alt-short" => ""},
-    "d7" => %{"semitones" => 9,
+    "d7" => %{"parent" => "M7",
+              "semitones" => -2,
               "name" => "Diminished seventh",
               "alt" => "",
               "alt-short" => ""},
-    "m7" => %{"semitones" => 10,
+    "m7" => %{"parent" => "M7",
+              "semitones" => -1,
               "name" => "Minor seventh",
               "alt" => "",
               "alt-short" => ""},
-    "A6" => %{"semitones" => 10,
+    "A6" => %{"parent" => "M6",
+              "semitones" => 1,
               "name" => "Augmented sixth",
               "alt" => "",
               "alt-short" => ""},
-    "M7" => %{"semitones" => 11,
+    "M7" => %{"parent" => "P1",
+              "semitones" => 11,
               "name" => "Major seventh",
               "alt" => "",
               "alt-short" => ""},
-    "d8" => %{"semitones" => 11,
+    "d8" => %{"parent" => "P8",
+              "semitones" => -1,
               "name" => "Diminished octave",
               "alt" => "",
               "alt-short" => ""},
-    "P8" => %{"semitones" => 12,
+    "P8" => %{"parent" => "P1",
+              "semitones" => 12,
               "name" => "Perfect octave",
               "alt" => "",
               "alt-short" => ""},
-    "A7" => %{"semitones" => 12,
+    "A7" => %{"parent" => "M7",
+              "semitones" => 12,
               "name" => "Augmented seventh",
               "alt" => "",
               "alt-short" => ""}
@@ -136,18 +161,62 @@ defmodule Musix.Intervals do
     end
   end
 
-  ## get note from interval and root
-  def get_note(root, interval) do
-    case get_interval_semitones(interval) do
+  #retrieve interval from parent
+  def get_parent_interval_semitones(interval) do
+    case Map.has_key?(interval, "parent") do
+      true ->
+        get_interval_semitones(interval["parent"])
+      false ->
+        {:ok, 0}
+    end
+  end
+
+  #get parent note, before altering it
+  def get_parent_note(root, interval_name) do
+    #retrieve interval
+    case get_interval(interval_name) do
       {:ok, interval} ->
-        case get_note_above(root, interval) do
-          {:ok, note} ->
-            {:ok, get_note_alias_if_needed(root, note)}
+        # getparent interval semitones
+        case get_parent_interval_semitones(interval) do
+          {:ok, semitones} when semitones > 0 ->
+            #get note above
+            case get_note_above(root, semitones) do
+              {:ok, note} ->
+                {:ok, note}
+              {:error, message} ->
+                {:error, message}
+            end
+          {:ok, semitones} when semitones == 0 ->
+            {:ok, root}
           {:error, message} ->
             {:error, message}
         end
       {:error, message} ->
         {:error, message}
+    end
+  end
+
+  ## get note from interval and root
+  def get_note(root, interval) do
+    case get_parent_note(root, interval) do
+      {:ok, note} ->
+        case get_interval_semitones(interval) do
+          {:ok, semitones} ->
+            get_note_by_semitones(note, semitones)
+          {:error, message} ->
+            {:error, message}
+        end
+      {:error, message} ->
+        {:error, message}
+    end
+  end
+
+  def get_note_by_semitones(root, semitones) do
+    case semitones > 0 do
+      true ->
+        get_altered_note_above(root, semitones)
+      false ->
+        get_altered_note_below(root, semitones)
     end
   end
 
