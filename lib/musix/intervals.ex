@@ -202,7 +202,13 @@ defmodule Musix.Intervals do
       {:ok, note} ->
         case get_interval_semitones(interval) do
           {:ok, semitones} ->
-            get_note_by_semitones(note, semitones)
+            # retrieve note alias if needed
+            case get_note_by_semitones(note, semitones) do
+              {:ok, note} ->
+                {:ok, get_note_alias_if_needed(root, note)}
+              {:error, message} ->
+                {:error, message}
+            end
           {:error, message} ->
             {:error, message}
         end

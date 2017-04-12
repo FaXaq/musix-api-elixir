@@ -19,6 +19,11 @@ defmodule Musix.NoteTest do
       _ ->
         assert false
     end
+
+    case get_note_index("Cb") do
+      {atom, x} ->
+        assert(atom === :error)
+    end
   end
 
   test "Get note alias" do
@@ -78,6 +83,23 @@ defmodule Musix.NoteTest do
         assert(atom == :ok)
         assert(note === "C")
     end
+
+    case get_flattened_note("Cb") do
+      {atom, note} ->
+        assert(atom == :ok)
+        assert(note === "Bb")
+    end
+
+    case get_flattened_note("Fbb") do
+      {atom, note} ->
+        assert(atom == :ok)
+        assert(note === "D")
+    end
+
+    case get_flattened_note("X") do
+      {atom, _} ->
+        assert(atom == :error)
+    end
   end
 
   test "flatten note" do
@@ -103,8 +125,20 @@ defmodule Musix.NoteTest do
 
     case sharpen_note("Ass") do
       {atom, note} ->
-        assert(atom == :ok)
+        assert(atom === :ok)
         assert(note === "Bs")
+    end
+
+    case sharpen_note("B") do
+      {atom, note} ->
+        assert(atom === :ok)
+        assert(note === "Bs")
+    end
+
+    case sharpen_note("Bs") do
+      {atom, note} ->
+        assert(atom === :ok)
+        assert(note === "Bss")
     end
   end
 

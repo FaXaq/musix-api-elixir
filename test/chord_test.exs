@@ -20,7 +20,7 @@ defmodule Musix.ChordTest do
   test "get a minor triad" do
     case get_chord("minor","C") do
       {atom, chord} ->
-        assert(["C","Ds","G"] === chord["notes"])
+        assert(["C","Eb","G"] === chord["notes"])
         assert(atom == :ok)
     end
   end
@@ -36,7 +36,7 @@ defmodule Musix.ChordTest do
   test "get a diminished triad" do
     case get_chord("dim","G") do
       {atom, chord} ->
-        assert(["G","As","Cs"] === chord["notes"])
+        assert(["G","Bb","Db"] === chord["notes"])
         assert(atom == :ok)
     end
   end

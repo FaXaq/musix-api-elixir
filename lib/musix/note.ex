@@ -26,23 +26,12 @@ defmodule Musix.Note do
     end
   end
 
-  def get_note_index(note, order) do
-    case order do
-      :asc ->
-        notes = Tuple.to_list @notes
-        {:ok, Enum.find_index(notes, fn(x) -> x == note end)}
-      :desc ->
-        notes = Tuple.to_list @notes
-        {:ok, Enum.find_index(notes, fn(x) -> x == note end)}
-    end
-  end
-
   # flatten note given in parameter
   def flatten_note(note) do
-    case get_note_index(note, :desc) do
+    case get_note_index(note) do
       {:ok, _} ->
         #to flatten note append b at the end
-        case String.contains?(note, "s") do
+        case String.contains?(note, "s") or String.contains?(note, "bb") do
           true ->
             get_flattened_note(note)
           false ->
@@ -69,36 +58,41 @@ defmodule Musix.Note do
           1
       end
 
-    case get_note_index(note, :desc) do
+    case get_note_index(note) do
       #when note_index is superior to 0, give previous element in tuple
       {:ok, index} when index > 0 ->
         {:ok, elem(@notes, index-interval)}
 
-        #else give last one
+      #else give last one
       {:ok, _} ->
         {:ok, elem(@notes,@notes_length-interval)}
       _ ->
-        {:error, "Couldn't get the flattened note from " <> note}
+        case get_note_alias(note) do
+          x when x === note ->
+            {:error, "Couldn't get the sharpened note from " <> note}
+          x ->
+            get_flattened_note(x)
+        end
     end
   end
 
   def sharpen_note(note) do
-    case get_note_index(note, :desc) do
+    case get_note_index(note) do
       {:ok, _} ->
         #to flatten note append b at the end
-        case String.contains?(note, "b") do
+        case String.contains?(note, "b") or String.contains?(note, "ss") do
           true ->
             get_sharpened_note(note)
           false ->
-            case String.contains?(note, "ss") do
-              true ->
-                sharpen_note(get_note_alias(note))
-              false ->
-                {:ok, note <> "s"}
-            end
+            {:ok, note <> "s"}
         end
       {:error, _} ->
-        {:error, "Couldn't sharpen the note " <> note}
+        case get_note_alias(note) do
+          x when x === note ->
+            {:error, "Please enter a valid note" <> note}
+          x ->
+            sharpen_note(x)
+        end
     end
   end
 
@@ -114,7 +108,7 @@ defmodule Musix.Note do
           1
       end
 
-    case get_note_index(note, :asc) do
+    case get_note_index(note) do
         #when note_index is last, give first one
       {:ok, index} when index === @notes_length-1 ->
         {:ok, elem(@notes,1)}
@@ -124,7 +118,12 @@ defmodule Musix.Note do
         {:ok, elem(@notes,index+interval)}
 
       _ ->
-        {:error, "Couldn't get the sharpened note from " <> note}
+        case get_note_alias(note) do
+          x when x === note->
+            {:error, "Couldn't get the sharpened note from " <> note}
+          x ->
+            get_sharpened_note(x)
+        end
     end
   end
 
