@@ -3,7 +3,7 @@ defmodule Musix.Note do
   """
 
   # constants
-  @notes {"Ab","A","As","Bb","B","C","Cs","Db","D","Ds","Eb","E","F","Fs","Gb","G","Gs"}
+  @notes {"Ab","A","As","Bb","B","Bs","Cb","C","Cs","Db","D","Ds","Eb","E","Es","Fb","F","Fs","Gb","G","Gs"}
   @notes_alias %{"Ab" => "Gs", "Bb" => "As", "Db" => "Cs", "Eb" => "Ds", "Gb" => "Fs",
                  "Gs" => "Ab", "As" => "Bb", "Cs" => "Db", "Ds" => "Eb", "Fs" => "Gb",
                  "Cb" => "B", "Bs" => "C", "Fb" => "E", "Es" => "F",
@@ -53,7 +53,12 @@ defmodule Musix.Note do
     interval =
       case String.contains?(note, "b") do
         true ->
-          2
+          case String.contains?(note, "C") or String.contains?(note, "F") do
+            true ->
+              3
+            false ->
+              2
+          end
         _ ->
           1
       end
@@ -103,7 +108,12 @@ defmodule Musix.Note do
     interval =
       case String.contains?(note, "s") do
         true ->
-          2
+          case String.contains?(note, "B") or String.contains?(note, "E") do
+            true ->
+              3
+            false ->
+              2
+          end
         _ ->
           1
       end

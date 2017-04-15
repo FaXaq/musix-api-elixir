@@ -38,7 +38,10 @@ defmodule Musix.Chord do
                  "intervals" => ["P1","M3","A5","M7"]},
     "aug7" => %{"long" => "augmented seventh",
                 "long_desc" => "an augmented triad with a minor seventh.",
-                "intervals" => ["P1","M3","P5","m7"]}
+                "intervals" => ["P1","M3","P5","m7"]},
+    "sus4" => %{"long" => "suspended four",
+                "long_desc" => "",
+                "intervals" => ["P1","M3","P4"]}
   }
 
   def get_chords do

@@ -2,7 +2,7 @@ defmodule Musix.NoteTest do
   use ExUnit.Case
   use Musix.Note
 
-  @valid_notes ["Ab","A","As","Bb","B","C","Cs","Db","D","Ds","Eb","E","F","Fs","Gb","G","Gs"]
+  @valid_notes ["Ab","A","As","Bb","B","Bs","Cb","C","Cs","Db","D","Ds","Eb","E","Es","Fb","F","Fs","Gb","G","Gs"]
 
   test "Can get all notes" do
     #check if get_notes retrieves a list
@@ -21,8 +21,8 @@ defmodule Musix.NoteTest do
     end
 
     case get_note_index("Cb") do
-      {atom, x} ->
-        assert(atom === :error)
+      {atom, _} ->
+        assert(atom === :ok)
     end
   end
 
