@@ -44,10 +44,12 @@ defmodule Musix.Chord do
                 "intervals" => ["P1","M3","P4"]}
   }
 
+  # Retrieve all chords definition without notes
   def get_chords do
     @chords
   end
 
+  # Retrieve all chords definitions with notes
   def get_chords(root) do
     {
       :ok,
@@ -60,6 +62,7 @@ defmodule Musix.Chord do
     }
   end
 
+  # Add chord notes to chord definition
   def add_chord_to_chords(chord, value) do
     case value do
       {:ok, new} ->
@@ -69,6 +72,7 @@ defmodule Musix.Chord do
     end
   end
 
+  # Check if chord exists
   def validate_chord(chord) do
     case Map.get(@chords, chord) do
       nil ->
@@ -78,6 +82,7 @@ defmodule Musix.Chord do
     end
   end
 
+  # Retrieve a single chord definition with notes
   def get_chord(chord, root) do
     case Map.has_key?(@chords, chord) do
       true ->
@@ -92,6 +97,7 @@ defmodule Musix.Chord do
     end
   end
 
+  # Retrieve chords notes
   def build_chord(chord, root) do
     case get_chord_intervals(chord) do
       {:ok, intervals} ->
@@ -108,6 +114,7 @@ defmodule Musix.Chord do
     end
   end
 
+  # Retrieve chords intervals
   def get_chord_intervals(chord) do
     case Map.has_key?(@chords, chord) do
       true ->
