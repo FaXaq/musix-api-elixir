@@ -30,7 +30,14 @@ defmodule Musix.Router do
 
     get "/chords/", ChordController, :index
 
-    get "/chords/:root/:chord", ChordController, :get
     get "/chords/:root/", ChordController, :get_all_chords
+    get "/chords/:root/:chord", ChordController, :get
+
+    get "/intervals", IntervalsController, :index
+    get "/intervals/:root/:interval", IntervalsController, :get_interval
+
+    get "/scales", ScaleController, :index
+    get "/scales/:root/", ScaleController, :get_scales
+    get "/scales/:root/:scale", ScaleController, :get
   end
 end

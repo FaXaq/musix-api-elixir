@@ -148,13 +148,34 @@ defmodule Musix.Note do
   end
 
   ## flip note if needed
-  def get_note_alias_if_needed(root, note) do
-    case (String.contains?(root,"b") and String.contains?(note, "s")) or
-      (String.contains?(root,"s") and String.contains?(note, "b")) do
+  def get_note_alias_if_needed(root, note, semitones) do
+    # Check if :
+    # - note should be flat (because of semitones relative to parent note are negatives)
+    # - note should be sharp (because of semitones relative to parent note are positives)
+    # - if there is a missmatch between the alteration (flat or sharp) of root and note
+    case (semitones < 0 and is_sharp?(note) or
+      semitones > 0 and is_flat?(note) or
+      (are_missmatch_altered?(root, note))) do
       true ->
         get_note_alias(note)
       false ->
-        note
+        # check if only note is altered
+        case (!is_altered?(root) and is_altered?(note)) do
+          true ->
+            # if so check if note alias is not
+            case get_note_alias(note) do
+              note_alias ->
+                case is_altered?(note_alias) do
+                  true ->
+                    note
+                  false ->
+                    # if not retur note alias
+                    note_alias
+                end
+            end
+          false ->
+            note
+        end
     end
   end
 
@@ -224,6 +245,45 @@ defmodule Musix.Note do
 
   def get_altered_note_below(root, semitone) when semitone == 0 do
     {:ok, root}
+  end
+
+  defp is_altered?(note) do
+    is_flat?(note) or is_sharp?(note)
+  end
+
+  defp is_flat?(note) do
+    String.contains?(note, "b")
+  end
+
+  defp is_sharp?(note) do
+    String.contains?(note, "s")
+  end
+
+  defp are_missmatch_altered?(root, note) do
+    (is_flat?(root) and is_sharp?(note)) or
+    (is_sharp?(root) and is_flat?(note))
+  end
+
+  defp are_both_altered?(root, note) do
+    is_altered?(root) and is_altered?(note)
+  end
+
+  defp are_none_altered?(root, note) do
+    is_altered?(root) or is_altered?(note)
+  end
+
+  defp get_note_alteration(note) do
+    case is_flat?(note) do
+      true ->
+        :flat
+      false ->
+        case is_sharp?(note) do
+          true ->
+            :sharp
+          false ->
+            :natural
+        end
+    end
   end
 
   defmacro __using__(_) do

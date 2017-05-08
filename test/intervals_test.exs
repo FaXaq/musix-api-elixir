@@ -46,6 +46,12 @@ defmodule Musix.IntervalsTest do
         assert(atom === :ok)
         assert(note == "B")
     end
+
+    case get_note("C", "P4") do
+      {atom, note} ->
+        assert(atom === :ok)
+        assert(note == "F")
+    end
   end
 
   test "get parent note" do

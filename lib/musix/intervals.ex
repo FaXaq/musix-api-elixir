@@ -182,7 +182,8 @@ defmodule Musix.Intervals do
             #get note above
             case get_note_above(root, semitones) do
               {:ok, note} ->
-                {:ok, note}
+                # Send back note with alias if needed
+                {:ok, get_note_alias_if_needed(root, note, semitones)}
               {:error, message} ->
                 {:error, message}
             end
@@ -196,16 +197,18 @@ defmodule Musix.Intervals do
     end
   end
 
-  ## get note from interval and root
+  # get note from interval and root
   def get_note(root, interval) do
     case get_parent_note(root, interval) do
-      {:ok, note} ->
+      {:ok, parent_note} ->
         case get_interval_semitones(interval) do
           {:ok, semitones} ->
             # retrieve note alias if needed
-            case get_note_by_semitones(note, semitones) do
+            case get_note_by_semitones(parent_note, semitones) do
               {:ok, note} ->
-                {:ok, get_note_alias_if_needed(root, note)}
+                # send back note with alias if needed
+                IO.puts "Working on the interval : " <> interval
+                {:ok, get_note_alias_if_needed(parent_note, note, semitones)}
               {:error, message} ->
                 {:error, message}
             end
@@ -256,6 +259,29 @@ defmodule Musix.Intervals do
   ## get semi-tones between notes
   def get_tones_between(root, note) do
     get_semi_tones_between(root,note) / 2
+  end
+
+  # Check if interval exists
+  def validate_interval(interval) do
+    case Map.get(@intervals, interval) do
+      nil ->
+        {:error, "interval not found"}
+      x ->
+        {:ok, x}
+    end
+  end
+
+  # check if interval is prefect
+  defp is_perfect?(interval) do
+    case Map.has_key?(@intervals[interval], "parent") do
+      false ->
+        false
+      true ->
+        case @intervals[interval]["parent"] === "P1" do
+          true_or_false ->
+            true_or_false
+        end
+    end
   end
 
   defmacro __using__(_) do
