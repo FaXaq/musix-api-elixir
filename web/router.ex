@@ -39,5 +39,7 @@ defmodule Musix.Router do
     get "/scales", ScaleController, :index
     get "/scales/:root/", ScaleController, :get_scales
     get "/scales/:root/:scale", ScaleController, :get
+
+    get "/strings/positions/:root", StringsController, :get_positions_on_strings
   end
 end

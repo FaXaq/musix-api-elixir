@@ -5,7 +5,11 @@ defmodule Musix.Scale do
   @scales %{
     "chromatic" => %{"intervals" => ["P1","m2","M2","m3","M3","P4","A4","P5","m6","M6","m7","M7"]},
     "major" => %{"intervals" => ["P1","M2","M3","P4","P5","M6","M7"]},
-    "minor" => %{"intervals" => ["P1","M2","m3","P4","P5","m6","m7"]},
+    "major-pentatonic" => %{"intervals" => ["P1","M2","M3","P5","M6"]},
+    "minor" => %{"intervals" => ["P1","M2","m3","P4","P5","m6","m7"],
+                "alt" => "natural minor"},
+    "blues" => %{"intervals" => ["P1","M2","M3","d5","P5","M6"]},
+    "minor-pentatonic" => %{"intervals" => ["P1","m3","P4","P5","m7"]},
   }
 
   # Retrieve all scales definitions

@@ -8,7 +8,12 @@ defmodule Musix.Strings do
   module containing generic functions for strings instruments with frets (default is guitar)
   """
 
-  @tuning ["E","A","D","G","B","E"]
+  @tuning %{"E" => %{},
+            "A" => %{},
+            "D" => %{},
+            "G" => %{},
+            "B" => %{},
+            "E" => %{}}
   @frets 22 #each fret represent a semi-tone
   @name "Guitar"
   @capo 0
@@ -85,14 +90,15 @@ defmodule Musix.Strings do
   end
 
   def get_positions_on_strings(root) do
-    {:ok, Enum.into(@tuning, %{}, fn tuning ->
-      case get_position_on_string(root, tuning) do
-        {:ok, position} ->
-          %{tuning => {root, get_positions(position)}}
-        {:error, message} ->
-          {:error, message}
-      end
-    end)}
+    {
+      :ok,
+    (for {tuning, _} <-
+      @tuning, into: %{}, do: {
+        tuning,
+        add_position_to_tuning(
+          tuning, get_position_on_string(root, tuning), root
+        )})
+    }
   end
 
   def get_position_on_string(tuning, root) do
@@ -102,6 +108,16 @@ defmodule Musix.Strings do
       {:error, message} ->
         {:error, message}
     end
+  end
+
+  # Add chord notes to chord definition
+  def add_position_to_tuning(tuning, position, root) do
+      case position do
+        {:ok, position} ->
+          Map.put(@tuning[tuning], root, get_positions(position))
+        {:error, message} ->
+          Map.put(@tuning[tuning], root, "Couldn't retrieve positions of note " <> root <> " on string " <> root)
+      end
   end
 
   def get_positions(position) do

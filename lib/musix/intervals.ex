@@ -207,7 +207,6 @@ defmodule Musix.Intervals do
             case get_note_by_semitones(parent_note, semitones) do
               {:ok, note} ->
                 # send back note with alias if needed
-                IO.puts "Working on the interval : " <> interval
                 {:ok, get_note_alias_if_needed(parent_note, note, semitones)}
               {:error, message} ->
                 {:error, message}
