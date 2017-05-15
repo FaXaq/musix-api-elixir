@@ -37,6 +37,7 @@ defmodule Musix.Mixfile do
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
      {:cors_plug, "~> 1.2"},
-     {:excoveralls, "~> 0.6", only: :test}]
+     {:excoveralls, "~> 0.6", only: :test},
+     {:cors_plug, "~> 1.2"},]
   end
 end

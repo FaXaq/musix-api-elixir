@@ -6,11 +6,10 @@ defmodule Musix.Router do
     plug :fetch_session
     plug :fetch_flash
     plug :protect_from_forgery
-    plug :put_secure_browser_headers
   end
 
   pipeline :api do
-    plug CORSPlug, [origin: "http://localhost:9000"]
+    plug CORSPlug
     plug :accepts, ["json"]
   end
 
