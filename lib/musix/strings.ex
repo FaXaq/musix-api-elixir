@@ -10,22 +10,22 @@ defmodule Musix.Strings do
 
   @strings [%{
                note: "E",
-               alt: "1",
+               order: "1",
             },%{
                note: "A",
-               alt: "2",
+               order: "2",
             },%{
                note: "D",
-               alt: "3",
+               order: "3",
             },%{
                note: "G",
-               alt: "4",
+               order: "4",
             },%{
                note: "B",
-               alt: "5",
+               order: "5",
             },%{
                note: "E",
-               alt: "6",
+               order: "6",
             }]
   @frets 22 #each fret represent a semi-tone
   @name "Guitar"
