@@ -252,6 +252,8 @@ defmodule Musix.Intervals do
           false ->
             get_semi_tones_between(new_root, note, interval + 1)
         end
+      {:error, message} ->
+        {:error, message}
     end
   end
 

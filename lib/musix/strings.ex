@@ -8,12 +8,25 @@ defmodule Musix.Strings do
   module containing generic functions for strings instruments with frets (default is guitar)
   """
 
-  @tuning %{"E" => %{},
-            "A" => %{},
-            "D" => %{},
-            "G" => %{},
-            "B" => %{},
-            "E" => %{}}
+  @strings [%{
+               note: "E",
+               alt: "1",
+            },%{
+               note: "A",
+               alt: "2",
+            },%{
+               note: "D",
+               alt: "3",
+            },%{
+               note: "G",
+               alt: "4",
+            },%{
+               note: "B",
+               alt: "5",
+            },%{
+               note: "E",
+               alt: "6",
+            }]
   @frets 22 #each fret represent a semi-tone
   @name "Guitar"
   @capo 0
@@ -32,14 +45,14 @@ defmodule Musix.Strings do
     end
   end
 
-  def get_tuning do
-    @tuning
+  def get_string do
+    @string
   end
 
-  def set_tuning(tuning) do
-    case is_list(tuning) do
+  def set_string(string) do
+    case is_list(string) do
       true ->
-        @tuning = tuning
+        @string = string
         {:ok}
       _ ->
         {:error, "provide a list"}
@@ -64,9 +77,9 @@ defmodule Musix.Strings do
     @capo
   end
 
-  def get_tuning_with_capo do
-    Enum.into(@tuning, [], fn tuning ->
-      case get_note_above(tuning, @capo) do
+  def get_string_with_capo do
+    Enum.into(@string, [], fn string ->
+      case get_note_above(string, @capo) do
         {:ok, note} ->
           note
         {:error, message} ->
@@ -92,32 +105,30 @@ defmodule Musix.Strings do
   def get_positions_on_strings(root) do
     {
       :ok,
-    (for {tuning, _} <-
-      @tuning, into: %{}, do: {
-        tuning,
-        add_position_to_tuning(
-          tuning, get_position_on_string(root, tuning), root
-        )})
+    (for string <-
+      @strings, into: [], do:
+        %{
+          description: string,
+          positions: get_positions_on_string(root, string.note),
+        })
     }
   end
 
-  def get_position_on_string(tuning, root) do
-    case get_note_index(root) do
+  # depreciated method
+  def get_position_on_string(note, string) do
+    case get_note_index(note) do
       {:ok, _} ->
-        {:ok, get_semi_tones_between(root, tuning)}
+        {:ok, get_semi_tones_between(Enum.at(@strings, string).note, note)}
       {:error, message} ->
         {:error, message}
     end
   end
 
-  # Add chord notes to chord definition
-  def add_position_to_tuning(tuning, position, root) do
-      case position do
-        {:ok, position} ->
-          Map.put(@tuning[tuning], root, get_positions(position))
-        {:error, message} ->
-          Map.put(@tuning[tuning], root, "Couldn't retrieve positions of note " <> root <> " on string " <> root)
-      end
+  def get_positions_on_string(note, string_note) do
+    case get_semi_tones_between(string_note, note) do
+      position ->
+        get_positions(position)
+    end
   end
 
   def get_positions(position) do
