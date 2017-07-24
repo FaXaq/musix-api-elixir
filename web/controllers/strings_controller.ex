@@ -32,6 +32,14 @@ defmodule Musix.StringsController do
     end
   end
 
+  def get_fret_number(conn, _params) do
+    put_status(conn, 200)
+    |> json(%{
+          status: 200,
+          frets: get_frets()
+            })
+  end
+
   defp error_400(conn, message) do
     put_status(conn, 400)
     |> json(%{
